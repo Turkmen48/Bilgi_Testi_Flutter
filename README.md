@@ -12,7 +12,9 @@ soruBankasi adlı listenin içine Soru class'ından türetilmiş soruları soru 
 ```
 
 ## Ekran Görüntüleri
-<img src="https://github.com/Turkmen48/DrumMachine_Flutter/blob/main/screenshot/ss1.png" width="500" height="700">
+<img src="https://github.com/Turkmen48/Bilgi_Testi_Flutter/blob/main/screenshots/1.1.png" width="500" height="700">
+<img src="https://github.com/Turkmen48/Bilgi_Testi_Flutter/blob/main/screenshots/2.1.png" width="500" height="700">
+<img src="https://github.com/Turkmen48/Bilgi_Testi_Flutter/blob/main/screenshots/3.1.png" width="500" height="700">
 
 
 
