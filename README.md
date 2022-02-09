@@ -1,3 +1,4 @@
+![](https://img.shields.io/github/license/Turkmen48/Bilgi_Testi_Flutter) ![](https://img.shields.io/twitter/follow/aazdenkur?style=social) 
 # Bilgi Testi
 
 7 sorudan oluşan puanlama mekaniği olan, modern tasarımlı, flutter ile geliştirilmiş bir mobil uygulama. 
