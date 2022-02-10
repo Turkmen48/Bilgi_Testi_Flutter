@@ -1,9 +1,13 @@
 import 'package:bilgi_testi/constants.dart';
 import 'package:flutter/material.dart';
 
+import 'test_veri.dart';
+
 void main() => runApp(BilgiTesti());
 
 class BilgiTesti extends StatelessWidget {
+  const BilgiTesti({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,24 +22,58 @@ class BilgiTesti extends StatelessWidget {
 }
 
 class SoruSayfasi extends StatefulWidget {
+  const SoruSayfasi({Key? key}) : super(key: key);
+
   @override
   _SoruSayfasiState createState() => _SoruSayfasiState();
 }
 
 class _SoruSayfasiState extends State<SoruSayfasi> {
   List<Widget> secimler = [];
-  int soruIndex = 0;
-  List<Soru> soruBankasi = [
-    Soru('1.Titanic gelmiş geçmiş en büyük gemidir', false),
-    Soru('2.Dünyadaki tavuk sayısı insan sayısından fazladır', true),
-    Soru('3.Kelebeklerin ömrü bir gündür', false),
-    Soru('4.Dünya düzdür', false),
-    Soru('5.Kaju fıstığı aslında bir meyvenin sapıdır', true),
-    Soru('6.Fatih Sultan Mehmet hiç patates yememiştir', true),
-    Soru('7.Fransızlar 80 demek için, 4 - 20 der', true),
-    Soru("null", false)
-  ];
-  int puan = 0;
+  TestVeri test_1 = TestVeri();
+  void butonFonksiyonu(bool secilenButon) {
+    if (test_1.testBittiMi() == true) {
+      setState(() {
+        if (test_1.getSoruYaniti() == secilenButon) {
+          secimler.add(kDogruIconu);
+          test_1.puanVer(10);
+        } else {
+          secimler.add(kYanlisIconu);
+        }
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Sorular Bitti"),
+              content: Text("Tebrikler, puanınız=${test_1.getPuan()}"),
+              actions: <Widget>[
+                TextButton(
+                    child: Text("Tekrar Dene"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      setState(() {
+                        test_1.puanSifirla();
+                        secimler = [];
+                        test_1.sifirla();
+                      });
+                    }),
+              ],
+            );
+          });
+    } else {
+      setState(() {
+        if (test_1.getSoruYaniti() == secilenButon) {
+          secimler.add(kDogruIconu);
+          test_1.puanVer(10);
+        } else {
+          secimler.add(kYanlisIconu);
+        }
+        test_1.sonrakiSoru();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -48,9 +86,7 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                soruIndex <= 6
-                    ? soruBankasi[soruIndex].soruMetni
-                    : "Sorular Bitti Puanın=$puan",
+                test_1.getSoruMetni(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20.0,
@@ -60,7 +96,7 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
             ),
           ),
         ),
-        Row(children: secimler),
+        Wrap(children: secimler),
         Expanded(
           flex: 1,
           child: Padding(
@@ -78,19 +114,7 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
                             size: 30.0,
                           ),
                           onPressed: () {
-                            bool dogruYanit = soruBankasi[soruIndex].soruYaniti;
-
-                            setState(() {
-                              if (soruIndex <= 6) {
-                                if (dogruYanit == false) {
-                                  secimler.add(kDogruIconu);
-                                  puan = puan + 10;
-                                } else {
-                                  secimler.add(kYanlisIconu);
-                                }
-                                soruIndex++;
-                              }
-                            });
+                            butonFonksiyonu(false);
                           },
                         ))),
                 Expanded(
@@ -103,17 +127,7 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
                           child: Icon(Icons.thumb_up, size: 30.0),
                           onPressed: () {
                             setState(() {
-                              bool dogruYanit =
-                                  soruBankasi[soruIndex].soruYaniti;
-                              if (soruIndex <= 6) {
-                                if (dogruYanit == true) {
-                                  secimler.add(kDogruIconu);
-                                  puan = puan + 10;
-                                } else {
-                                  secimler.add(kYanlisIconu);
-                                }
-                                soruIndex++;
-                              }
+                              butonFonksiyonu(true);
                             });
                           },
                         ))),
@@ -122,10 +136,4 @@ class _SoruSayfasiState extends State<SoruSayfasi> {
       ],
     );
   }
-}
-
-class Soru {
-  String soruMetni;
-  bool soruYaniti;
-  Soru(@required this.soruMetni, @required this.soruYaniti);
 }
